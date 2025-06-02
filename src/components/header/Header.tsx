@@ -12,17 +12,20 @@ import { useAtom } from "jotai";
 import { isLoggedAtom } from "@/atoms/isLogged";
 
 const Header = () => {
-  const [isLogin, setIsLogin] = useState<boolean | null>(null);
-  const [isLogged] = useAtom(isLoggedAtom);
+  const [initialLoginState, setInitialLoginState] = useState<boolean | null>(
+    null
+  );
+  const [isLogged, setIsLoggedIn] = useAtom(isLoggedAtom);
   const { isOpen, setIsOpen } = useSidebarState();
   const currentPath = usePathname();
   const isAuthPage =
     currentPath.includes("/signin") || currentPath.includes("/signup");
 
   useEffect(() => {
-    const loginStatus = localStorage.getItem("isLogin") !== null;
-    setIsLogin(loginStatus);
-  }, [isLogged]);
+    const localValue = localStorage.getItem("isLogin") === "true";
+    setInitialLoginState(localValue);
+    setIsLoggedIn(localValue); // isLogged 초기화도 함께!
+  }, []);
 
   const tabletStyle =
     "tablet:h-[60px] tablet:gap-[24px] tablet:px-[72px] tablet:py-[15px] tablet:text-lg";
@@ -38,10 +41,10 @@ const Header = () => {
         <HeaderNavigation isAuthPage={isAuthPage} />
         {isAuthPage ? (
           <AuthPageNavigation />
-        ) : isLogin ? (
-          <button onClick={() => setIsOpen(!isOpen)}>
+        ) : isLogged ? (
+          <button onClick={() => setIsOpen((isOpen) => !isOpen)}>
             <HeaderMenu />
-          </button>
+          </button> // initialState가 true여도 바뀌어야 하고, isLogged가 트루여도 바뀌어야 함.
         ) : (
           <LoginButton />
         )}

@@ -43,7 +43,7 @@ const DetailRequirements = ({ info }: { info: DetailRequirementsProps }) => {
       <h2 className="text-black-50 text-2lg font-semibold pc:text-3xl">
         모집 조건
       </h2>
-      <ul className="border-bg-line-100 mt-4 flex w-full flex-col gap-4 rounded-md border bg-background-100 px-4 py-[10px] text-md pc:h-[288px] pc:w-[640px] pc:p-6 pc:text-xl">
+      <ul className="border-bg-line-100 mt-4 flex w-full flex-col gap-4 rounded-md border bg-background-100 px-4 py-[10px] text-md pc:h-[288px] pc:w-[600px] pc:p-6 pc:text-xl">
         {requirementList.map((list) => (
           <li key={list.id} className="flex gap-4">
             <h3 className="text-black-200">{list.title}</h3>
