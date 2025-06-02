@@ -34,27 +34,23 @@ export const signinAction = async (formData: FormData) => {
     }
   );
 
-  const responseErrorText = {
-    401: "이메일 또는 비밀번호를 확인해주세요.",
-    404: "존재하지 않는 사용자입니다.",
-    500: "서버 오류가 발생했습니다.",
-  };
+  const result = await response.json();
 
   if (!response.ok) {
-    console.error("로그인 요청 실패", response.statusText, response.status);
+    const responseErrorText = result.message;
+    console.error("로그인 요청 실패", result.message);
     return {
       status: response.status,
-      error:
-        responseErrorText[response.status as keyof typeof responseErrorText] ||
-        response.statusText,
+      error: responseErrorText,
+    };
+  } else {
+    const { accessToken, refreshToken, ...rest } = result;
+
+    await setCookie(accessToken, refreshToken, rest.user.role, rest.user.id);
+
+    return {
+      status: response.status,
+      error: "",
     };
   }
-
-  const { accessToken, refreshToken, ...rest } = await response.json();
-
-  await setCookie(accessToken, refreshToken, rest.user.role, rest.user.id);
-
-  return {
-    status: response.status,
-  };
 };

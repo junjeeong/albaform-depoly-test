@@ -2,22 +2,21 @@
 
 import { useEffect, useRef } from "react";
 import { useModal } from "@/hooks/useModal";
-import isPast from "@/utils/isPast";
 
-const NoticeIsClosed = ({ closedDate }: { closedDate: string }) => {
+const NoticeIsClosed = () => {
   const { openModal } = useModal();
   const hasShownToast = useRef(false);
 
   useEffect(() => {
     const showModal = () => {
-      if (!hasShownToast.current && isPast(closedDate)) {
+      if (!hasShownToast.current) {
         openModal("ClosedAlbaformModal");
         hasShownToast.current = true;
       }
     };
 
     showModal();
-  }, [openModal, closedDate]);
+  }, [openModal]);
 
   return null;
 };
